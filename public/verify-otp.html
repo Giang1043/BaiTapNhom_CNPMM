@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xác Nhận OTP - Forgot OTP</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="login-container">
+            <div class="login-header">
+                <h1>Xác Nhận Mã OTP</h1>
+                <p>Vui lòng nhập mã OTP được gửi đến email của bạn</p>
+            </div>
+
+            <form id="verifyOTPForm" class="login-form">
+                <div class="form-group">
+                    <label for="email">Địa chỉ Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="Vị dụ: levana@gmail.com"
+                        readonly
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="otp">Mã OTP</label>
+                    <input 
+                        type="text" 
+                        id="otp" 
+                        name="otp"
+                        placeholder="Nhập 6 chữ số"
+                        maxlength="6"
+                        pattern="[0-9]{6}"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="login-btn">Xác Nhận</button>
+
+                <div class="divider">
+                    <span>hoặc</span>
+                </div>
+
+                <p class="signup-prompt">
+                    <a href="/forgot-password" class="signup-link">Gửi lại mã OTP</a>
+                </p>
+            </form>
+
+            <div id="message" class="message"></div>
+        </div>
+    </div>
+
+    <script src="js/verify-otp.js"></script>
+</body>
+</html>
