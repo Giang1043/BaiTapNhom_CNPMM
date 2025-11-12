@@ -65,29 +65,36 @@ Forgot_OTP/
 
 ## Cài Đặt
 
-### 1. Clone hoặc tải dự án
+### 1. Đường Dẫn Dự Án
 ```bash
-cd c:\20252026\Term2\CongNghePhanMemMoi\Forgot_OTP
+C:\20252026\Term2\CongNghePhanMemMoi\Forgot_OTP_Yarn
 ```
 
-### 2. Cài đặt Dependencies
+### 2. Yêu Cầu Hệ Thống
+- **Node.js** (v14 hoặc cao hơn)
+- **MongoDB** (phiên bản địa phương hoặc cloud)
+- **Yarn** (package manager)
+
+### 3. Cài đặt Dependencies
 ```bash
-npm install
+cd C:\20252026\Term2\CongNghePhanMemMoi\Forgot_OTP_Yarn
+yarn install
 ```
 
-### 3. Cấu Hình File .env
+### 4. Cấu Hình File .env
 
-Sao chép nội dung `.env.example` hoặc tạo file `.env` với nội dung:
+Tạo file `.env` trong thư mục gốc với nội dung sau:
 
 ```
-MONGO_URI=mongodb://<username>:<password>@localhost:27017/ForgotPassword?authSource=admin
+# Database Configuration
+MONGO_URI=mongodb://localhost:27017/ForgotPassword
 PORT=3000
 NODE_ENV=development
 
 # Email Configuration (Gmail)
 EMAIL_SERVICE=gmail
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASSWORD=your_app_password
+EMAIL_USER=bachhoaxanhdev@gmail.com
+EMAIL_PASSWORD=vnydvdhrrwteusvo
 
 # OTP Configuration
 OTP_EXPIRY=600
@@ -109,14 +116,14 @@ JWT_SECRET=your_secret_key_here
 
 ### 4. Chạy Ứng Dụng
 
-#### Development Mode (với auto-reload)
+#### Development Mode (với auto-reload bằng nodemon)
 ```bash
-npm run dev
+yarn dev
 ```
 
 #### Production Mode
 ```bash
-npm start
+yarn start
 ```
 
 Ứng dụng sẽ chạy tại: **http://localhost:3000**
@@ -197,15 +204,102 @@ Xác thực mã OTP
 
 ## Database
 
-This project now uses MongoDB with Mongoose. Schemas are defined in the `models/` directory:
+Dự án sử dụng **MongoDB** với **Mongoose** ODM.
 
-- `models/User.js` - users collection
-- `models/Otp.js` - otps collection
-- `models/PasswordReset.js` - password_resets collection
+### Cấu Hình MongoDB
 
-If you prefer to use authentication for MongoDB, set `MONGO_URI` in `.env` with a username and password. The default example uses a local user named `users` with the password `014789` and database `ForgotPassword` on port 27017.
+#### Phương Thức 1: MongoDB Địa Phương (Local)
 
-## Bảo Mật
+1. **Cài đặt MongoDB Community Edition**
+   - Tải từ: https://www.mongodb.com/try/download/community
+   - Cài đặt mặc định trên `C:\Program Files\MongoDB`
+
+2. **Khởi động MongoDB Server**
+   ```bash
+   # Mở PowerShell as Administrator
+   cd "C:\Program Files\MongoDB\Server\7.0\bin"
+   mongod.exe
+   ```
+   - Hoặc nếu cài dưới dạng Service, nó sẽ tự chạy
+
+3. **Cấu hình .env**
+   ```
+   MONGO_URI=mongodb://localhost:27017/ForgotPassword
+   ```
+
+#### Phương Thức 2: MongoDB Cloud (Atlas)
+
+1. Tạo tài khoản tại: https://www.mongodb.com/cloud/atlas
+2. Tạo cluster và lấy connection string
+3. Cấu hình .env:
+   ```
+   MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/ForgotPassword
+   ```
+
+### Các Collection (Schema)
+
+Dự án sử dụng các model sau:
+
+- **User.js** - Lưu trữ thông tin người dùng
+  ```
+  email, password (mã hóa), fullName, phone, createdAt
+  ```
+
+- **Otp.js** - Lưu trữ mã OTP tạm thời
+  ```
+  email, otp, expiresAt
+  ```
+
+- **PasswordReset.js** - Lưu trữ token reset mật khẩu
+  ```
+  email, token, expiresAt
+  ```
+
+## Tài Khoản & Email Test
+
+### Email Gửi OTP
+```
+EMAIL_USER=bachhoaxanhdev@gmail.com
+EMAIL_PASSWORD=vnydvdhrrwteusvo
+```
+
+### Tài Khoản Test (Mẫu)
+Sau khi cài đặt, bạn có thể tạo tài khoản mới hoặc sử dụng:
+```
+Email: test@example.com
+Password: Test@123456
+```
+
+### Lưu Ý Về Gmail
+- App Password được sử dụng (không phải mật khẩu Gmail thường)
+- Chỉ hoạt động khi bật 2-Factor Authentication trên Gmail
+- Nếu thay đổi, cần cập nhật lại `.env`
+
+## Yarn Commands
+
+### Cài đặt packages
+```bash
+yarn install
+```
+
+### Chạy ứng dụng (Development)
+```bash
+yarn dev
+```
+- Sử dụng `nodemon` để tự động reload khi có thay đổi code
+- Giúp phát triển nhanh hơn
+
+### Chạy ứng dụng (Production)
+```bash
+yarn start
+```
+- Chạy node server trực tiếp
+- Dùng cho môi trường production
+
+### Xem tất cả scripts
+```bash
+yarn run
+```
 
 🔒 **Mã Hóa Mật Khẩu** - Sử dụng bcryptjs  
 🔒 **OTP Hết Hạn** - OTP có hiệu lực 10 phút  
